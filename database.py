@@ -1,15 +1,20 @@
-from sqlalchemy.orm import sessionmaker, declarative_base
-from sqlalchemy import create_engine
+from sqlalchemy import text,create_engine
+from sqlalchemy.orm import sessionmaker
 
-database_url='mysql+pymysql://AbdAlrahman:password@localhost/jci_homs'
 
-Base=declarative_base()
+db_url='mysql+pymysql://AbdAlrahman:password@localhost/jci_homs'
 
-engine=create_engine(database_url, echo=True)
+engine=create_engine(db_url, echo=True)
 session=sessionmaker(bind=engine)
 
-def create_all_tables():
-    Base.metadata.create_all(bind=engine)
 
 
-
+def sql_query():
+    connection=engine.connect()
+    query=text('''
+    INSERT INTO users (name,email)
+    VALUES ('abdalrahman','123@gmail.com') ;
+    ''')
+    connection.execute(query)
+    connection.commit()
+    connection.close()
